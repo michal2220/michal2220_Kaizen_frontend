@@ -1,4 +1,4 @@
-package com.Kaizen_frontend.frontend;
+package com.Kaizen_frontend.frontend.views.kaizen;
 
 import com.Kaizen_frontend.frontend.domain.Kaizen;
 import com.Kaizen_frontend.frontend.domain.User;
@@ -8,7 +8,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@Route("kaizen")
+@Route("kaizens")
 public class KaizenList extends VerticalLayout {
 
     public KaizenList (KaizenService service) {

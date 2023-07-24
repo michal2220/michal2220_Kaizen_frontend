@@ -41,8 +41,6 @@ public class Kaizen {
     private Integer userId;
     @JsonProperty("rewardId")
     private Integer rewardId;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     @JsonProperty("kaizenId")
     public Integer getKaizenId() {
@@ -132,16 +130,6 @@ public class Kaizen {
     @JsonProperty("rewardId")
     public void setRewardId(Integer rewardId) {
         this.rewardId = rewardId;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }
