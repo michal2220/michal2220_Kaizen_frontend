@@ -1,8 +1,12 @@
 package com.Kaizen_frontend.frontend.service;
 
 import com.Kaizen_frontend.frontend.domain.User;
+import com.Kaizen_frontend.frontend.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import java.util.List;
 
 
 @Service
@@ -20,4 +24,19 @@ public class UserService {
                 .retrieve()
                 .bodyToMono(User[].class).block();
     }
+
+    public User[] findByLastname(String lastname) throws UserNotFoundException {
+        User[] userList = webClient.get()
+                .uri("users/userLastname/{lastname}", lastname)
+                .retrieve()
+                .bodyToMono(User[].class)
+                .block();
+
+        if (userList == null) {
+            throw new UserNotFoundException("Users with lastname " + lastname + " were not found.");
+        }
+
+        return userList;
+    }
+
 }
