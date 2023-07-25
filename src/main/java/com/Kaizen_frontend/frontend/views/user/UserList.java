@@ -9,6 +9,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
@@ -18,6 +19,7 @@ import com.vaadin.flow.router.Route;
 public class UserList extends VerticalLayout {
 
     TextField filterField = new TextField();
+    IntegerField kaizenCountField = new IntegerField();
     Grid<User> grid = new Grid<>(User.class);
     UserForm form;
     private final UserService service;
@@ -39,13 +41,6 @@ public class UserList extends VerticalLayout {
 
     }
 
-    private void filterUsersByLastname(String lastname) throws UserNotFoundException {
-        grid.setItems(service.findByLastname(lastname));
-    }
-
-    private void updateList() {
-        grid.setItems(service.getUsers());
-    }
 
     private Component getContent() {
         HorizontalLayout content = new HorizontalLayout(grid, form);
@@ -62,25 +57,22 @@ public class UserList extends VerticalLayout {
     }
 
     private Component getToolbar() {
-        filterField.setPlaceholder("Filter by lastname...");
-        filterField.setClearButtonVisible(true);
-        filterField.setValueChangeMode(ValueChangeMode.LAZY);
-        filterField.addValueChangeListener(e -> updateList());
+        filteringByLastname();
 
-        Button filterButton = new Button("Filter");
+        filteringByKaizenCount();
 
-        filterButton.addClickListener(e -> {
-            try {
-                filterUsersByLastname(filterField.getValue());
-            } catch (UserNotFoundException ex) {
-                updateList();
-            }
-        });
+        Button filterButton = new Button("Add User");
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterField, filterButton);
+        HorizontalLayout toolbar = new HorizontalLayout(filterField, kaizenCountField, filterButton);
 
         return toolbar;
     }
+
+
+    private void updateList() {
+        grid.setItems(service.getUsers());
+    }
+
 
     private void configureGrid() {
 
@@ -90,4 +82,48 @@ public class UserList extends VerticalLayout {
         grid.setColumns("userId", "name", "lastname", "brigade");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
+
+    private void filterUsersByLastname(String lastname) throws UserNotFoundException {
+        try {
+            grid.setItems(service.findByLastname(lastname));
+        } catch (Exception e) {
+            updateList();
+        }
+    }
+
+    private void filteringByLastname() {
+        filterField.setPlaceholder("Filter by lastname...");
+        filterField.setClearButtonVisible(true);
+        filterField.setValueChangeMode(ValueChangeMode.LAZY);
+        filterField.addValueChangeListener(e -> {
+            try {
+                filterUsersByLastname(
+                        filterField.getValue());
+            } catch (UserNotFoundException ex) {
+                updateList();
+            }
+        });
+    }
+
+    private void filterUsersByKaizenCount(int kaizenCount) throws UserNotFoundException {
+        grid.setItems(service.findByKaizenCount(kaizenCount));
+    }
+
+    private void filteringByKaizenCount() {
+        kaizenCountField.setPlaceholder("Filter by kaizen count...");
+        kaizenCountField.setClearButtonVisible(true);
+        kaizenCountField.setValueChangeMode(ValueChangeMode.LAZY);
+        kaizenCountField.addValueChangeListener(e -> {
+            try {
+                if (kaizenCountField.getValue() != null) {
+                    filterUsersByKaizenCount(kaizenCountField.getValue());
+                } else {
+                    updateList();
+                }
+            } catch (UserNotFoundException ex) {
+                updateList();
+            }
+        });
+    }
+
 }

@@ -26,17 +26,46 @@ public class UserService {
     }
 
     public User[] findByLastname(String lastname) throws UserNotFoundException {
-        User[] userList = webClient.get()
+        User[] users = webClient.get()
                 .uri("users/userLastname/{lastname}", lastname)
                 .retrieve()
                 .bodyToMono(User[].class)
                 .block();
 
-        if (userList == null) {
+        if (users == null) {
             throw new UserNotFoundException("Users with lastname " + lastname + " were not found.");
         }
 
-        return userList;
+        return users;
     }
+
+
+    public User[] findByKaizenCount(int kaizenCount) throws UserNotFoundException {
+
+        User[] users = webClient.get()
+                .uri("users/kaizenQuantity/{kaizenCount}", kaizenCount)
+                .retrieve()
+                .bodyToMono(User[].class)
+                .block();
+        if (users == null) {
+            throw new UserNotFoundException("No users with given amount of kaizens");
+        }
+        return users;
+    }
+
+    public User[] findWithLessKaizenThen(int kaizenCount) throws UserNotFoundException {
+
+        User[] users = webClient.get()
+                .uri("users/lessThen/{kaizenCount}", kaizenCount)
+                .retrieve()
+                .bodyToMono(User[].class)
+                .block();
+        if (users == null) {
+            throw new UserNotFoundException("No such users");
+        }
+        return users;
+    }
+
+
 
 }
