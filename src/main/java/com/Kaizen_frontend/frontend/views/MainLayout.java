@@ -1,10 +1,15 @@
 package com.Kaizen_frontend.frontend.views;
 
+import com.Kaizen_frontend.frontend.views.user.UserList;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.HighlightCondition;
+import com.vaadin.flow.router.HighlightConditions;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
@@ -19,8 +24,7 @@ public class MainLayout extends AppLayout {
         H1 logo = new H1("Kaizen app");
         logo.addClassNames(
                 LumoUtility.FontSize.LARGE,
-                LumoUtility.Margin.MEDIUM,
-                LumoUtility.Background.CONTRAST_60
+                LumoUtility.Margin.MEDIUM
         );
 
         var header = new HorizontalLayout(new DrawerToggle(), logo);
@@ -36,7 +40,12 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
+        RouterLink userLink = new RouterLink("User", UserList.class);
+        userLink.setHighlightCondition(HighlightConditions.sameLocation());
 
+        addToDrawer(new VerticalLayout(
+                userLink
+        ));
 
     }
 }

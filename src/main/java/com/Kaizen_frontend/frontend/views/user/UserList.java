@@ -3,6 +3,7 @@ package com.Kaizen_frontend.frontend.views.user;
 import com.Kaizen_frontend.frontend.domain.User;
 import com.Kaizen_frontend.frontend.exception.UserNotFoundException;
 import com.Kaizen_frontend.frontend.service.UserService;
+import com.Kaizen_frontend.frontend.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,7 +15,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
 
-@Route("users")
+@Route(value = "users", layout = MainLayout.class)
 public class UserList extends VerticalLayout {
 
     TextField filterField = new TextField();
