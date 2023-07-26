@@ -20,6 +20,9 @@ public class UserList extends VerticalLayout {
 
     TextField filterField = new TextField();
     IntegerField kaizenCountField = new IntegerField();
+    IntegerField lessKaizenField = new IntegerField();
+    IntegerField moreKaizenField = new IntegerField();
+    IntegerField brigadeField = new IntegerField();
     Grid<User> grid = new Grid<>(User.class);
     UserForm form;
     private final UserService service;
@@ -58,12 +61,14 @@ public class UserList extends VerticalLayout {
 
     private Component getToolbar() {
         filteringByLastname();
-
         filteringByKaizenCount();
+        filteringByLessKaizen();
+        filteringByMoreKaizen();
+        filteringByBrigade();
 
         Button filterButton = new Button("Add User");
-
-        HorizontalLayout toolbar = new HorizontalLayout(filterField, kaizenCountField, filterButton);
+        HorizontalLayout toolbar = new HorizontalLayout(filterField, brigadeField, kaizenCountField,
+                lessKaizenField, moreKaizenField, filterButton);
 
         return toolbar;
     }
@@ -79,7 +84,7 @@ public class UserList extends VerticalLayout {
         grid.addClassName("user-grid");
         grid.setSizeFull();
 
-        grid.setColumns("userId", "name", "lastname", "brigade");
+        grid.setColumns("userId", "name", "lastname", "brigade", "kaizenListSize");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
@@ -117,6 +122,69 @@ public class UserList extends VerticalLayout {
             try {
                 if (kaizenCountField.getValue() != null) {
                     filterUsersByKaizenCount(kaizenCountField.getValue());
+                } else {
+                    updateList();
+                }
+            } catch (UserNotFoundException ex) {
+                updateList();
+            }
+        });
+    }
+
+    private void filterUsersWithLessKaizen(int kaizenCount) throws UserNotFoundException {
+        grid.setItems(service.findWithLessKaizenThen(kaizenCount));
+    }
+
+    private void filteringByLessKaizen() {
+        lessKaizenField.setPlaceholder("Filter users with less then...");
+        lessKaizenField.setClearButtonVisible(true);
+        lessKaizenField.setValueChangeMode(ValueChangeMode.LAZY);
+        lessKaizenField.addValueChangeListener(e -> {
+            try {
+                if (lessKaizenField.getValue() != null) {
+                    filterUsersWithLessKaizen(lessKaizenField.getValue());
+                } else {
+                    updateList();
+                }
+            } catch (UserNotFoundException ex) {
+                updateList();
+            }
+        });
+    }
+
+    private void filterUsersWithMoreKaizen(int kaizenCount) throws UserNotFoundException {
+        grid.setItems(service.findWithMoreKaizenThen(kaizenCount));
+    }
+
+    private void filteringByMoreKaizen() {
+        moreKaizenField.setPlaceholder("Filter users with more then...");
+        moreKaizenField.setClearButtonVisible(true);
+        moreKaizenField.setValueChangeMode(ValueChangeMode.LAZY);
+        moreKaizenField.addValueChangeListener(e -> {
+            try {
+                if (moreKaizenField.getValue() != null) {
+                    filterUsersWithMoreKaizen(moreKaizenField.getValue());
+                } else {
+                    updateList();
+                }
+            } catch (UserNotFoundException ex) {
+                updateList();
+            }
+        });
+    }
+
+    private void filterUsersByBrigade(int brigade) throws UserNotFoundException {
+        grid.setItems(service.finByBrigade(brigade));
+    }
+
+    private void filteringByBrigade() {
+        brigadeField.setPlaceholder("Filter by brigade...");
+        brigadeField.setClearButtonVisible(true);
+        brigadeField.setValueChangeMode(ValueChangeMode.LAZY);
+        brigadeField.addValueChangeListener(e -> {
+            try {
+                if (brigadeField.getValue() != null) {
+                    filterUsersByBrigade(brigadeField.getValue());
                 } else {
                     updateList();
                 }

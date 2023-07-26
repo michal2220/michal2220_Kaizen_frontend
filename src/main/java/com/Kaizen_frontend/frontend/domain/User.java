@@ -68,6 +68,9 @@ public class User {
         return kaizenList;
     }
 
+    @JsonProperty("kaizenListSize")
+    public int getKaizenListSize() {return kaizenList.size();}
+
     @JsonProperty("kaizenList")
     public void setKaizenList(List<Integer> kaizenList) {
         this.kaizenList = kaizenList;

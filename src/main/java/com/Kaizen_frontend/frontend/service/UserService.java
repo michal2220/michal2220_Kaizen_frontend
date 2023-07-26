@@ -66,6 +66,32 @@ public class UserService {
         return users;
     }
 
+    public User[] findWithMoreKaizenThen(int kaizenCount) throws UserNotFoundException {
+
+        User[] users = webClient.get()
+                .uri("users/moreThen/{kaizenCount}", kaizenCount)
+                .retrieve()
+                .bodyToMono(User[].class)
+                .block();
+        if (users == null) {
+            throw new UserNotFoundException("No such users");
+        }
+        return users;
+    }
+
+    public User[] finByBrigade(int brigade) throws UserNotFoundException {
+
+        User[] users = webClient.get()
+                .uri("users/brigade/{brigade}", brigade)
+                .retrieve()
+                .bodyToMono(User[].class)
+                .block();
+        if (users == null) {
+            throw new UserNotFoundException("Wrong brigade");
+        }
+        return users;
+    }
+
 
 
 }
