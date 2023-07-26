@@ -1,7 +1,6 @@
 package com.Kaizen_frontend.frontend.service;
 
 import com.Kaizen_frontend.frontend.domain.Kaizen;
-import com.Kaizen_frontend.frontend.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,5 +18,15 @@ public class KaizenService {
                 .uri("kaizens")
                 .retrieve()
                 .bodyToMono(Kaizen[].class).block();
+    }
+
+    public Kaizen findKaizenById(int kaizenId) {
+        Kaizen kaizens = webClient.get()
+                .uri("/kaizens/kaizenId/{kaizenId}", kaizenId)
+                .retrieve()
+                .bodyToMono(Kaizen.class)
+                .block();
+
+        return kaizens;
     }
 }

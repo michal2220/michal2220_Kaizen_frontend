@@ -65,7 +65,7 @@ public class UserList extends VerticalLayout {
 
         form.addSaveListener(this::saveUser);
         form.addDeleteListener(this::deleteContact);
-        form.addCloseListener(e->closeEditor());
+        form.addCloseListener(e -> closeEditor());
     }
 
     private void deleteContact(UserForm.DeleteEvent deleteEvent) {
@@ -87,8 +87,7 @@ public class UserList extends VerticalLayout {
         filteringByBrigade();
 
         Button addUser = new Button("Add User");
-        addUser.addClickListener(e-> addUser());
-
+        addUser.addClickListener(e -> addUser());
 
 
         HorizontalLayout toolbar = new HorizontalLayout(filterField, brigadeField, kaizenCountField,
@@ -120,7 +119,7 @@ public class UserList extends VerticalLayout {
     }
 
     private void editUser(User user) {
-        if (user==null){
+        if (user == null) {
             closeEditor();
         } else {
             form.setUser(user);
@@ -223,12 +222,8 @@ public class UserList extends VerticalLayout {
         brigadeField.setValueChangeMode(ValueChangeMode.LAZY);
         brigadeField.addValueChangeListener(e -> {
             try {
-                if (brigadeField.getValue() != null) {
-                    filterUsersByBrigade(brigadeField.getValue());
-                } else {
-                    updateList();
-                }
-            } catch (UserNotFoundException ex) {
+                filterUsersByBrigade(brigadeField.getValue());
+            } catch (NullPointerException | UserNotFoundException ex) {
                 updateList();
             }
         });

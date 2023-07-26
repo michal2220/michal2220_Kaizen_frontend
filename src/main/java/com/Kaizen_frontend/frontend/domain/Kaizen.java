@@ -1,5 +1,6 @@
 package com.Kaizen_frontend.frontend.domain;
 
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -26,11 +27,11 @@ public class Kaizen {
     @JsonProperty("kaizenId")
     private Integer kaizenId;
     @JsonProperty("fillingDate")
-    private String fillingDate;
+    private LocalDate fillingDate;
     @JsonProperty("completed")
     private Boolean completed;
     @JsonProperty("completionDate")
-    private Object completionDate;
+    private LocalDate completionDate;
     @JsonProperty("problem")
     private String problem;
     @JsonProperty("solution")
@@ -53,12 +54,12 @@ public class Kaizen {
     }
 
     @JsonProperty("fillingDate")
-    public String getFillingDate() {
+    public LocalDate getFillingDate() {
         return fillingDate;
     }
 
     @JsonProperty("fillingDate")
-    public void setFillingDate(String fillingDate) {
+    public void setFillingDate(LocalDate fillingDate) {
         this.fillingDate = fillingDate;
     }
 
@@ -78,7 +79,7 @@ public class Kaizen {
     }
 
     @JsonProperty("completionDate")
-    public void setCompletionDate(Object completionDate) {
+    public void setCompletionDate(LocalDate completionDate) {
         this.completionDate = completionDate;
     }
 
