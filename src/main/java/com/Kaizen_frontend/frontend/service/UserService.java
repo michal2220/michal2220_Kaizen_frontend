@@ -4,9 +4,7 @@ import com.Kaizen_frontend.frontend.domain.User;
 import com.Kaizen_frontend.frontend.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.util.List;
+import reactor.core.publisher.Mono;
 
 
 @Service
@@ -79,7 +77,7 @@ public class UserService {
         return users;
     }
 
-    public User[] finByBrigade(int brigade) throws UserNotFoundException {
+    public User[] findByBrigade(int brigade) throws UserNotFoundException {
 
         User[] users = webClient.get()
                 .uri("users/brigade/{brigade}", brigade)
@@ -93,5 +91,23 @@ public class UserService {
     }
 
 
+    public User saveUser(User user) {
 
+        return webClient.post()
+                .uri("users")
+                .body(Mono.just(user), User.class)
+                .retrieve()
+                .bodyToMono(User.class)
+                .block();
+
+    }
+
+
+    public void deleteUser(User user) {
+        webClient.delete()
+                .uri("users/{userId}", user.getUserId())
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
 }

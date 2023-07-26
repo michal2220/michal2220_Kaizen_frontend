@@ -6,7 +6,6 @@ import com.Kaizen_frontend.frontend.service.UserService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -41,7 +40,12 @@ public class UserList extends VerticalLayout {
         );
 
         updateList();
+        closeEditor();
+    }
 
+    private void closeEditor() {
+        form.setUser(null);
+        form.setVisible(false);
     }
 
 
@@ -57,6 +61,21 @@ public class UserList extends VerticalLayout {
     private void configureForm() {
         form = new UserForm();
         form.setWidth("25em");
+
+        form.addSaveListener(this::saveUser);
+        form.addDeleteListener(this::deleteContact);
+        form.addCloseListener(e->closeEditor());
+    }
+
+    private void deleteContact(UserForm.DeleteEvent deleteEvent) {
+        service.deleteUser(deleteEvent.getUser());
+        updateList();
+        closeEditor();
+    }
+
+    private void saveUser(UserForm.SaveEvent saveEvent) {
+        service.saveUser(saveEvent.getUser());
+        updateList();
     }
 
     private Component getToolbar() {
@@ -66,11 +85,20 @@ public class UserList extends VerticalLayout {
         filteringByMoreKaizen();
         filteringByBrigade();
 
-        Button filterButton = new Button("Add User");
+        Button addUser = new Button("Add User");
+        addUser.addClickListener(e-> addUser());
+
+
+
         HorizontalLayout toolbar = new HorizontalLayout(filterField, brigadeField, kaizenCountField,
-                lessKaizenField, moreKaizenField, filterButton);
+                lessKaizenField, moreKaizenField, addUser);
 
         return toolbar;
+    }
+
+    private void addUser() {
+        grid.asSingleSelect().clear();
+        editUser(new User());
     }
 
 
@@ -86,6 +114,17 @@ public class UserList extends VerticalLayout {
 
         grid.setColumns("userId", "name", "lastname", "brigade", "kaizenListSize");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        grid.asSingleSelect().addValueChangeListener(e -> editUser(e.getValue()));
+    }
+
+    private void editUser(User user) {
+        if (user==null){
+            closeEditor();
+        } else {
+            form.setUser(user);
+            form.setVisible(true);
+        }
     }
 
     private void filterUsersByLastname(String lastname) throws UserNotFoundException {
@@ -174,7 +213,7 @@ public class UserList extends VerticalLayout {
     }
 
     private void filterUsersByBrigade(int brigade) throws UserNotFoundException {
-        grid.setItems(service.finByBrigade(brigade));
+        grid.setItems(service.findByBrigade(brigade));
     }
 
     private void filteringByBrigade() {
