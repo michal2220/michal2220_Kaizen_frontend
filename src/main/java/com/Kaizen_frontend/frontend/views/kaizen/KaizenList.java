@@ -35,6 +35,12 @@ public class KaizenList extends VerticalLayout {
         );
 
         updateList();
+        closeEditor();
+    }
+
+    private void closeEditor() {
+        form.setKaizen(null);
+        form.setVisible(false);
     }
 
     private void updateList() {
@@ -53,21 +59,52 @@ public class KaizenList extends VerticalLayout {
     private void configureForm() {
         form = new KaizenForm();
         form.setWidth("25em");
+
+        form.addSaveListener(this::saveKaizen);
+        form.addDeleteListener(this::deleteKaizen);
+        form.addCloseListener(e -> closeEditor());
+    }
+
+    private void deleteKaizen(KaizenForm.DeleteEvent deleteEvent) {
+        service.deleteKaizen(deleteEvent.getKaizen());
+        updateList();
+    }
+
+    private void saveKaizen(KaizenForm.SaveEvent saveEvent) {
+        service.saveKaizen(saveEvent.getKaizen());
+        updateList();
     }
 
     private Component getToolbar() {
         filteringByUserId();
 
 
-        Button addKaizen = new Button("Add Kaizen");
+        Button addKaizenButton = new Button("Add Kaizen");
+        addKaizenButton.addClickListener(e-> addNewKaizen());
 
-        HorizontalLayout toolbar = new HorizontalLayout(idField, addKaizen);
+        HorizontalLayout toolbar = new HorizontalLayout(idField, addKaizenButton);
         return toolbar;
+    }
+
+    private void addNewKaizen() {
+        grid.asSingleSelect().clear();
+        editKaizen(new Kaizen());
     }
 
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns("kaizenId", "userId", "fillingDate", "completed", "problem", "solution");
+
+        grid.asSingleSelect().addValueChangeListener(e->editKaizen(e.getValue()));
+    }
+
+    private void editKaizen(Kaizen kaizen) {
+        if (kaizen==null){
+            closeEditor();
+        } else {
+            form.setKaizen(kaizen);
+            form.setVisible(true);
+        }
     }
 
     private void findByUserId(int kaizenId) {
@@ -75,14 +112,11 @@ public class KaizenList extends VerticalLayout {
     }
 
     private void filteringByUserId() throws NullPointerException {
-        idField.setPlaceholder("Find by kaizenId");
+        idField.setPlaceholder("Find by kaizenId...");
         idField.setClearButtonVisible(true);
         idField.setValueChangeMode(ValueChangeMode.LAZY);
         idField.addValueChangeListener(e -> {
             try {
-
-
-
                     findByUserId(idField.getValue());
 
             } catch (NullPointerException ex) {

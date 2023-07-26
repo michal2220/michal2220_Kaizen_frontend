@@ -74,7 +74,7 @@ public class Kaizen {
     }
 
     @JsonProperty("completionDate")
-    public Object getCompletionDate() {
+    public LocalDate getCompletionDate() {
         return completionDate;
     }
 

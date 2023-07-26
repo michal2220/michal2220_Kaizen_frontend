@@ -24,7 +24,7 @@ public class UserList extends VerticalLayout {
     IntegerField moreKaizenField = new IntegerField();
     IntegerField brigadeField = new IntegerField();
     Grid<User> grid = new Grid<>(User.class);
-    UserForm form;
+    private UserForm form;
     private final UserService service;
 
 
@@ -89,7 +89,6 @@ public class UserList extends VerticalLayout {
         Button addUser = new Button("Add User");
         addUser.addClickListener(e -> addUser());
 
-
         HorizontalLayout toolbar = new HorizontalLayout(filterField, brigadeField, kaizenCountField,
                 lessKaizenField, moreKaizenField, addUser);
 
@@ -108,10 +107,7 @@ public class UserList extends VerticalLayout {
 
 
     private void configureGrid() {
-
-        grid.addClassName("user-grid");
         grid.setSizeFull();
-
         grid.setColumns("userId", "name", "lastname", "brigade", "kaizenListSize");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
@@ -228,5 +224,4 @@ public class UserList extends VerticalLayout {
             }
         });
     }
-
 }

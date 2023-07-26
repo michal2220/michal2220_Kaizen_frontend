@@ -1,8 +1,10 @@
 package com.Kaizen_frontend.frontend.service;
 
 import com.Kaizen_frontend.frontend.domain.Kaizen;
+import com.Kaizen_frontend.frontend.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class KaizenService {
@@ -28,5 +30,23 @@ public class KaizenService {
                 .block();
 
         return kaizens;
+    }
+
+    public Kaizen saveKaizen(Kaizen kaizen) {
+
+        return webClient.post()
+                .uri("kaizens")
+                .body(Mono.just(kaizen), Kaizen.class)
+                .retrieve()
+                .bodyToMono(Kaizen.class)
+                .block();
+    }
+
+    public void deleteKaizen(Kaizen kaizen) {
+        webClient.delete()
+                .uri("kaizens/{kaizenId}", kaizen.getKaizenId())
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 }

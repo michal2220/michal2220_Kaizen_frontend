@@ -38,55 +38,43 @@ public class UserService {
     }
 
 
-    public User[] findByKaizenCount(int kaizenCount) throws UserNotFoundException {
+    public User[] findByKaizenCount(int kaizenCount) {
 
         User[] users = webClient.get()
                 .uri("users/kaizenQuantity/{kaizenCount}", kaizenCount)
                 .retrieve()
                 .bodyToMono(User[].class)
                 .block();
-        if (users == null) {
-            throw new UserNotFoundException("No users with given amount of kaizens");
-        }
         return users;
     }
 
-    public User[] findWithLessKaizenThen(int kaizenCount) throws UserNotFoundException {
+    public User[] findWithLessKaizenThen(int kaizenCount) {
 
         User[] users = webClient.get()
                 .uri("users/lessThen/{kaizenCount}", kaizenCount)
                 .retrieve()
                 .bodyToMono(User[].class)
                 .block();
-        if (users == null) {
-            throw new UserNotFoundException("No such users");
-        }
         return users;
     }
 
-    public User[] findWithMoreKaizenThen(int kaizenCount) throws UserNotFoundException {
+    public User[] findWithMoreKaizenThen(int kaizenCount){
 
         User[] users = webClient.get()
                 .uri("users/moreThen/{kaizenCount}", kaizenCount)
                 .retrieve()
                 .bodyToMono(User[].class)
                 .block();
-        if (users == null) {
-            throw new UserNotFoundException("No such users");
-        }
         return users;
     }
 
-    public User[] findByBrigade(int brigade) throws UserNotFoundException {
+    public User[] findByBrigade(int brigade){
 
         User[] users = webClient.get()
                 .uri("users/brigade/{brigade}", brigade)
                 .retrieve()
                 .bodyToMono(User[].class)
                 .block();
-        if (users == null) {
-            throw new UserNotFoundException("Wrong brigade");
-        }
         return users;
     }
 
@@ -99,7 +87,6 @@ public class UserService {
                 .retrieve()
                 .bodyToMono(User.class)
                 .block();
-
     }
 
 
