@@ -1,8 +1,10 @@
 package com.Kaizen_frontend.frontend.domain;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.Kaizen_frontend.frontend.views.kaizen.KaizenList;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -69,7 +71,13 @@ public class User {
     }
 
     @JsonProperty("kaizenListSize")
-    public int getKaizenListSize() {return kaizenList.size();}
+    public int getKaizenListSize() {
+        if (kaizenList == null) {
+            return 0;
+        } else {
+            return kaizenList.size();
+        }
+    }
 
     @JsonProperty("kaizenList")
     public void setKaizenList(List<Integer> kaizenList) {
