@@ -26,6 +26,7 @@ public class KaizenForm extends FormLayout {
 
     Binder<Kaizen> binder = new BeanValidationBinder<>(Kaizen.class);
 
+    IntegerField kaizenId = new IntegerField("kaizenId");
     TextField problem = new TextField("problem");
     TextField solution = new TextField("solution");
     IntegerField userId = new IntegerField("userId");
@@ -40,7 +41,7 @@ public class KaizenForm extends FormLayout {
     Button save = new Button("Save");
     Button delete = new Button("Delete");
     Button cancel = new Button("Cancel");
-    Button translate = new Button("Translate");
+    Button translate = new Button("Translate problem");
 
     public KaizenForm() {
         binder.bindInstanceFields(this);
@@ -49,6 +50,7 @@ public class KaizenForm extends FormLayout {
         translateField.setSizeFull();
 
         add(
+                kaizenId,
                 problem,
                 solution,
                 userId,
@@ -67,11 +69,10 @@ public class KaizenForm extends FormLayout {
     }
 
     private Component createButtonLayout() {
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_SUCCESS);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         save.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        translate.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                ButtonVariant.LUMO_SUCCESS);
+        translate.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
 
         save.addClickListener(event -> validateAndSave());
@@ -81,7 +82,7 @@ public class KaizenForm extends FormLayout {
         save.addClickShortcut(Key.ENTER);
         cancel.addClickShortcut(Key.ESCAPE);
 
-        return new HorizontalLayout(save, delete, cancel);
+        return new HorizontalLayout(save, delete, cancel, translate);
     }
 
     private void validateAndSave() {
@@ -123,6 +124,11 @@ public class KaizenForm extends FormLayout {
         }
     }
 
+    public static class TranslateEvent extends KaizenForm.KaizenFormEvent {
+        TranslateEvent(KaizenForm source, Kaizen kaizen) {
+            super(source, kaizen);
+        }
+    }
 
     public Registration addDeleteListener(ComponentEventListener<KaizenForm.DeleteEvent> listener) {
         return addListener(KaizenForm.DeleteEvent.class, listener);
@@ -134,6 +140,10 @@ public class KaizenForm extends FormLayout {
 
     public Registration addCloseListener(ComponentEventListener<KaizenForm.CloseEvent> listener) {
         return addListener(KaizenForm.CloseEvent.class, listener);
+    }
+
+    public Registration addTranslateListener(ComponentEventListener<KaizenForm.TranslateEvent> listener) {
+        return addListener(KaizenForm.TranslateEvent.class, listener);
     }
 
 }

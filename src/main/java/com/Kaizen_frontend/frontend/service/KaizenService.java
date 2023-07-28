@@ -65,4 +65,13 @@ public class KaizenService {
                 .bodyToMono(Kaizen[].class)
                 .block();
     }
+
+    public String getTranslation(int kaizenId) {
+        return webClient.get()
+                .uri("kaizens/translate/{kaizenId}", kaizenId)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+    }
 }

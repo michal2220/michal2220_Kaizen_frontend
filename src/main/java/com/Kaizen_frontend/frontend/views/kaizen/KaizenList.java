@@ -75,6 +75,9 @@ public class KaizenList extends VerticalLayout {
         form.addSaveListener(this::saveKaizen);
         form.addDeleteListener(this::deleteKaizen);
         form.addCloseListener(e -> closeEditor());
+        form.translate.addClickListener(event -> {
+            form.translateField.setValue(service.getTranslation(form.kaizenId.getValue()));
+        });
     }
 
     private void deleteKaizen(KaizenForm.DeleteEvent deleteEvent) {
