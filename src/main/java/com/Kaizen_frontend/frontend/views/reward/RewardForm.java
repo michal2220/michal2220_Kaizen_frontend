@@ -1,8 +1,6 @@
 package com.Kaizen_frontend.frontend.views.reward;
 
 import com.Kaizen_frontend.frontend.domain.Reward;
-import com.Kaizen_frontend.frontend.domain.User;
-import com.Kaizen_frontend.frontend.views.user.UserForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -17,7 +15,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-public class RewardForm  extends FormLayout {
+public class RewardForm extends FormLayout {
 
     Binder<Reward> binder = new BeanValidationBinder<>(Reward.class);
     TextField name = new TextField("name");
@@ -29,8 +27,12 @@ public class RewardForm  extends FormLayout {
     public RewardForm() {
         binder.bindInstanceFields(this);
 
-        add(name, price);
-        createButtonLayout();
+        add(
+                name,
+                price,
+                createButtonLayout()
+        );
+
     }
 
     public void setReward(Reward reward) {

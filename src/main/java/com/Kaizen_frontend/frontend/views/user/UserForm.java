@@ -14,15 +14,12 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-import java.util.List;
 
 public class UserForm extends FormLayout {
     Binder<User> binder = new BeanValidationBinder<>(User.class);
-
     TextField name = new TextField("First name");
     TextField lastName = new TextField("Last name");
     TextField brigade = new TextField("Brigade");
-
     Button save = new Button("Save");
     Button delete = new Button("Delete");
     Button cancel = new Button("Cancel");

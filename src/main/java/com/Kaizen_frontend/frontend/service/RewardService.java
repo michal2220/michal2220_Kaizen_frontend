@@ -1,7 +1,6 @@
 package com.Kaizen_frontend.frontend.service;
 
 import com.Kaizen_frontend.frontend.domain.Reward;
-import com.Kaizen_frontend.frontend.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;

@@ -65,7 +65,6 @@ public class RewardList extends VerticalLayout {
         form.addSaveListener(this::saveReward);
         form.addDeleteListener(this::deleteReward);
         form.addCloseListener(e -> closeEditor());
-
     }
 
     private void deleteReward(RewardForm.DeleteEvent deleteEvent) {
