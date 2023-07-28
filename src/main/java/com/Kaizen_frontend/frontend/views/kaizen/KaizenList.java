@@ -88,6 +88,7 @@ public class KaizenList extends VerticalLayout {
     private void saveKaizen(KaizenForm.SaveEvent saveEvent) {
         service.saveKaizen(saveEvent.getKaizen());
         updateList();
+        closeEditor();
     }
 
     private Component getToolbar() {

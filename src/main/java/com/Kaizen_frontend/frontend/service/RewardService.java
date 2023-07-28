@@ -27,6 +27,13 @@ public class RewardService {
                 .bodyToMono(Reward.class).block();
     }
 
+    public Reward getRewardByName(String name){
+        return webClient.get()
+                .uri("/rewardName/{name}", name)
+                .retrieve()
+                .bodyToMono(Reward.class).block();
+    }
+
     public void saveReward(Reward reward) {
 
         webClient.post()
