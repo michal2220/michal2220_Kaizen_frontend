@@ -19,4 +19,11 @@ public class RewardService {
                 .retrieve()
                 .bodyToMono(Reward[].class).block();
     }
+
+    public Reward getRewardsById(int rewardId) {
+        return webClient.get()
+                .uri("rewards/rewardId/{rewardId}", rewardId)
+                .retrieve()
+                .bodyToMono(Reward.class).block();
+    }
 }

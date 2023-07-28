@@ -1,6 +1,8 @@
 package com.Kaizen_frontend.frontend.views;
 
+import com.Kaizen_frontend.frontend.domain.Reward;
 import com.Kaizen_frontend.frontend.views.kaizen.KaizenList;
+import com.Kaizen_frontend.frontend.views.reward.RewardList;
 import com.Kaizen_frontend.frontend.views.user.UserList;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -47,9 +49,13 @@ public class MainLayout extends AppLayout {
         RouterLink kaizenLink = new RouterLink("Kaizen", KaizenList.class);
         kaizenLink.setHighlightCondition(HighlightConditions.sameLocation());
 
+        RouterLink rewardLink = new RouterLink("Reward", RewardList.class);
+        rewardLink.setHighlightCondition(HighlightConditions.sameLocation());
+
         addToDrawer(new VerticalLayout(
                 userLink,
-                kaizenLink
+                kaizenLink,
+                rewardLink
         ));
 
     }
