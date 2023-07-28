@@ -1,6 +1,7 @@
 package com.Kaizen_frontend.frontend.views.kaizen;
 
 import com.Kaizen_frontend.frontend.domain.Kaizen;
+import com.Kaizen_frontend.frontend.domain.Reward;
 import com.Kaizen_frontend.frontend.domain.User;
 import com.Kaizen_frontend.frontend.views.user.UserForm;
 import com.vaadin.flow.component.Component;
@@ -9,6 +10,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -18,6 +20,8 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
+import java.util.List;
+
 public class KaizenForm extends FormLayout {
 
     Binder<Kaizen> binder = new BeanValidationBinder<>(Kaizen.class);
@@ -26,17 +30,23 @@ public class KaizenForm extends FormLayout {
     TextField solution = new TextField("solution");
     IntegerField userId = new IntegerField("userId");
     DatePicker fillingDate = new DatePicker("fillingDate");
-    TextField completed = new TextField("completed");
+    ComboBox<Boolean> completed = new ComboBox<>("completed");
     DatePicker completionDate = new DatePicker("completionDate");
-    TextField rewarded = new TextField("rewarded");
+    ComboBox<Boolean> rewarded = new ComboBox<>("rewarded");
     IntegerField rewardId = new IntegerField("rewardId");
+
+    TextField translateField = new TextField("Translation");
 
     Button save = new Button("Save");
     Button delete = new Button("Delete");
     Button cancel = new Button("Cancel");
+    Button translate = new Button("Translate");
 
     public KaizenForm() {
         binder.bindInstanceFields(this);
+        completed.setItems(true, false);
+        rewarded.setItems(true, false);
+        translateField.setSizeFull();
 
         add(
                 problem,
@@ -47,7 +57,8 @@ public class KaizenForm extends FormLayout {
                 completionDate,
                 rewarded,
                 rewardId,
-                createButtonLayout()
+                createButtonLayout(),
+                translateField
         );
     }
 
@@ -59,6 +70,8 @@ public class KaizenForm extends FormLayout {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         save.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        translate.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                ButtonVariant.LUMO_SUCCESS);
 
 
         save.addClickListener(event -> validateAndSave());
@@ -79,15 +92,15 @@ public class KaizenForm extends FormLayout {
 
     // Events
     public static abstract class KaizenFormEvent extends ComponentEvent<KaizenForm> {
-        private final Kaizen user;
+        private final Kaizen kaizen;
 
-        protected KaizenFormEvent(KaizenForm source, Kaizen user) {
+        protected KaizenFormEvent(KaizenForm source, Kaizen kaizen) {
             super(source, false);
-            this.user = user;
+            this.kaizen = kaizen;
         }
 
         public Kaizen getKaizen() {
-            return user;
+            return kaizen;
         }
     }
 
@@ -109,6 +122,7 @@ public class KaizenForm extends FormLayout {
             super(source, null);
         }
     }
+
 
     public Registration addDeleteListener(ComponentEventListener<KaizenForm.DeleteEvent> listener) {
         return addListener(KaizenForm.DeleteEvent.class, listener);

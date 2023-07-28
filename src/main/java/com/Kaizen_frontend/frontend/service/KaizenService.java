@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+
 @Service
 public class KaizenService {
 
@@ -22,14 +24,20 @@ public class KaizenService {
                 .bodyToMono(Kaizen[].class).block();
     }
 
-    public Kaizen findKaizenById(int kaizenId) {
-        Kaizen kaizens = webClient.get()
+    public Kaizen[] findKaizenById(int kaizenId) {
+
+        return webClient.get()
                 .uri("/kaizens/kaizenId/{kaizenId}", kaizenId)
                 .retrieve()
-                .bodyToMono(Kaizen.class)
+                .bodyToMono(Kaizen[].class)
                 .block();
+    }
 
-        return kaizens;
+    public Kaizen[] getKaizensOlderThan(LocalDate date) {
+        return webClient.get()
+                .uri("kaizens/olderThen/{date}", date)
+                .retrieve()
+                .bodyToMono(Kaizen[].class).block();
     }
 
     public Kaizen saveKaizen(Kaizen kaizen) {
@@ -47,6 +55,14 @@ public class KaizenService {
                 .uri("kaizens/{kaizenId}", kaizen.getKaizenId())
                 .retrieve()
                 .toBodilessEntity()
+                .block();
+    }
+
+    public Kaizen[] getKaizensCreatedBy(String name, String lastname) {
+        return webClient.get()
+                .uri("kaizens/creator?name={name}&lastname={lastname}", name, lastname)
+                .retrieve()
+                .bodyToMono(Kaizen[].class)
                 .block();
     }
 }

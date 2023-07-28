@@ -88,10 +88,15 @@ public class UserList extends VerticalLayout {
         Button addUser = new Button("Add User");
         addUser.addClickListener(e -> addUser());
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterField, brigadeField, kaizenCountField,
-                lessKaizenField, moreKaizenField, addUser);
-
-        return toolbar;
+        return new VerticalLayout(
+                new HorizontalLayout(
+                        filterField,
+                        brigadeField,
+                        kaizenCountField),
+                new HorizontalLayout(
+                        lessKaizenField,
+                        moreKaizenField,
+                        addUser));
     }
 
     private void addUser() {

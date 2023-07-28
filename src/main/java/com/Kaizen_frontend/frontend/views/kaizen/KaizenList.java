@@ -5,12 +5,15 @@ import com.Kaizen_frontend.frontend.service.KaizenService;
 import com.Kaizen_frontend.frontend.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 
 @Route(value = "kaizens", layout = MainLayout.class)
@@ -18,8 +21,16 @@ public class KaizenList extends VerticalLayout {
 
     Grid<Kaizen> grid = new Grid<>(Kaizen.class);
     IntegerField idField = new IntegerField();
+    DatePicker olderThan = new DatePicker();
+    TextField createdByName = new TextField();
+    TextField createdByLastname = new TextField();
+    Button filterByCreatorButton = new Button("Filter");
+    Button shwoAllButton = new Button("Show all");
+    Button addKaizenButton = new Button("Add Kaizen");
+
     private KaizenForm form;
     private final KaizenService service;
+
 
     public KaizenList(KaizenService service) {
         this.service = service;
@@ -28,6 +39,7 @@ public class KaizenList extends VerticalLayout {
 
         configureGrid();
         configureForm();
+
 
         add(
                 getToolbar(),
@@ -77,13 +89,18 @@ public class KaizenList extends VerticalLayout {
 
     private Component getToolbar() {
         filteringByUserId();
+        filterOlderThan();
+        filterCreatedBy();
 
 
-        Button addKaizenButton = new Button("Add Kaizen");
-        addKaizenButton.addClickListener(e-> addNewKaizen());
+        addKaizenButton.addClickListener(e -> addNewKaizen());
 
-        HorizontalLayout toolbar = new HorizontalLayout(idField, addKaizenButton);
-        return toolbar;
+        shwoAllButton.addClickListener(e->updateList());
+
+
+        return new VerticalLayout(
+                new HorizontalLayout(idField, olderThan, addKaizenButton, shwoAllButton),
+                new HorizontalLayout(createdByName,createdByLastname,filterByCreatorButton));
     }
 
     private void addNewKaizen() {
@@ -95,11 +112,11 @@ public class KaizenList extends VerticalLayout {
         grid.setSizeFull();
         grid.setColumns("kaizenId", "userId", "fillingDate", "completed", "problem", "solution");
 
-        grid.asSingleSelect().addValueChangeListener(e->editKaizen(e.getValue()));
+        grid.asSingleSelect().addValueChangeListener(e -> editKaizen(e.getValue()));
     }
 
     private void editKaizen(Kaizen kaizen) {
-        if (kaizen==null){
+        if (kaizen == null) {
             closeEditor();
         } else {
             form.setKaizen(kaizen);
@@ -117,14 +134,41 @@ public class KaizenList extends VerticalLayout {
         idField.setValueChangeMode(ValueChangeMode.LAZY);
         idField.addValueChangeListener(e -> {
             try {
-                    findByUserId(idField.getValue());
+                findByUserId(idField.getValue());
 
             } catch (NullPointerException ex) {
                 updateList();
             }
         });
-
     }
 
+    private void filterOlderThan() {
+        olderThan.setClearButtonVisible(true);
+        olderThan.setPlaceholder("Older than");
+        olderThan.addValueChangeListener(e -> {
+            try {
+                grid.setItems(service.getKaizensOlderThan(olderThan.getValue()));
+            } catch (NullPointerException | WebClientResponseException exception) {
+                updateList();
+            }
+        });
+    }
+
+    private void filterCreatedBy() {
+        createdByName.setClearButtonVisible(true);
+        createdByName.setPlaceholder("Name");
+        createdByLastname.setClearButtonVisible(true);
+        createdByLastname.setPlaceholder("Lastname");
+
+
+        filterByCreatorButton.addClickListener(e -> {
+            try {
+                grid.setItems(service.getKaizensCreatedBy(createdByName.getValue(),
+                        createdByLastname.getValue()));
+            } catch (Exception exception) {
+                updateList();
+            }
+        });
+    }
 
 }
