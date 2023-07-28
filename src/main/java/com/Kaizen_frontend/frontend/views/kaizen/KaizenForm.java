@@ -56,14 +56,14 @@ public class KaizenForm extends FormLayout {
     }
 
     private Component createButtonLayout() {
-        save.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         save.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new KaizenForm.DeleteEvent(this, binder.getBean())));
-        cancel.addClickListener(event -> fireEvent(new KaizenForm.CloseEvent(this)));
+        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, binder.getBean())));
+        cancel.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
         save.addClickShortcut(Key.ENTER);
         cancel.addClickShortcut(Key.ESCAPE);
@@ -73,7 +73,7 @@ public class KaizenForm extends FormLayout {
 
     private void validateAndSave() {
         if (binder.isValid()) {
-            fireEvent(new KaizenForm.SaveEvent(this, binder.getBean()));
+            fireEvent(new SaveEvent(this, binder.getBean()));
         }
     }
 

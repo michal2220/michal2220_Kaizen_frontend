@@ -71,7 +71,6 @@ public class UserList extends VerticalLayout {
     private void deleteContact(UserForm.DeleteEvent deleteEvent) {
         service.deleteUser(deleteEvent.getUser());
         updateList();
-        closeEditor();
     }
 
     private void saveUser(UserForm.SaveEvent saveEvent) {

@@ -4,6 +4,7 @@ import com.Kaizen_frontend.frontend.domain.Reward;
 import com.Kaizen_frontend.frontend.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class RewardService {
@@ -25,5 +26,23 @@ public class RewardService {
                 .uri("rewards/rewardId/{rewardId}", rewardId)
                 .retrieve()
                 .bodyToMono(Reward.class).block();
+    }
+
+    public void saveReward(Reward reward) {
+
+        webClient.post()
+                .uri("rewards")
+                .body(Mono.just(reward), Reward.class)
+                .retrieve()
+                .bodyToMono(Reward.class)
+                .block();
+    }
+
+    public void deleteUser(Reward reward) {
+        webClient.delete()
+                .uri("rewards/{rewardId}", reward.getRewardId())
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 }

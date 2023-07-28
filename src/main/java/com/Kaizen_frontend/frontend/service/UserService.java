@@ -58,7 +58,7 @@ public class UserService {
         return users;
     }
 
-    public User[] findWithMoreKaizenThen(int kaizenCount){
+    public User[] findWithMoreKaizenThen(int kaizenCount) {
 
         User[] users = webClient.get()
                 .uri("users/moreThen/{kaizenCount}", kaizenCount)
@@ -68,7 +68,7 @@ public class UserService {
         return users;
     }
 
-    public User[] findByBrigade(int brigade){
+    public User[] findByBrigade(int brigade) {
 
         User[] users = webClient.get()
                 .uri("users/brigade/{brigade}", brigade)
@@ -79,9 +79,9 @@ public class UserService {
     }
 
 
-    public User saveUser(User user) {
+    public void saveUser(User user) {
 
-        return webClient.post()
+        webClient.post()
                 .uri("users")
                 .body(Mono.just(user), User.class)
                 .retrieve()

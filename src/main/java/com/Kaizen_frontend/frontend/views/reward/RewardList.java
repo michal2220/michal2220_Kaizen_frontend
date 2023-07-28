@@ -24,7 +24,7 @@ public class RewardList extends VerticalLayout {
     private RewardForm form;
     private RewardService rewardService;
 
-    public RewardList (RewardService rewardService) {
+    public RewardList(RewardService rewardService) {
         this.rewardService = rewardService;
         setSizeFull();
 
@@ -37,6 +37,12 @@ public class RewardList extends VerticalLayout {
         );
 
         updateList();
+        closeEditor();
+    }
+
+    private void closeEditor() {
+        form.setReward(null);
+        form.setVisible(false);
     }
 
     private void updateList() {
@@ -49,20 +55,34 @@ public class RewardList extends VerticalLayout {
         content.setFlexGrow(1, form);
         content.setSizeFull();
 
-        return content ;
+        return content;
     }
 
     private void configureForm() {
         form = new RewardForm();
         form.setWidth("25em");
 
+        form.addSaveListener(this::saveReward);
+        form.addDeleteListener(this::deleteReward);
+        form.addCloseListener(e -> closeEditor());
+
+    }
+
+    private void deleteReward(RewardForm.DeleteEvent deleteEvent) {
+        rewardService.deleteUser(deleteEvent.getReward());
+        updateList();
+    }
+
+    public void saveReward(RewardForm.SaveEvent saveEvent) {
+        rewardService.saveReward(saveEvent.getReward());
+        updateList();
     }
 
     private Component getToolbar() {
         idField.setPlaceholder("Filter by id...");
         idField.setClearButtonVisible(true);
         idField.setValueChangeMode(ValueChangeMode.LAZY);
-        idField.addValueChangeListener(e->{
+        idField.addValueChangeListener(e -> {
             try {
                 filterById(idField.getValue());
             } catch (NullPointerException ex) {
@@ -70,17 +90,34 @@ public class RewardList extends VerticalLayout {
             }
         });
         Button addRewardButton = new Button("Add reward");
+        addRewardButton.addClickListener(e -> addContact());
 
         HorizontalLayout toolbar = new HorizontalLayout(idField, addRewardButton);
         return toolbar;
     }
 
+    private void addContact() {
+        grid.asSingleSelect().clear();
+        editReward(new Reward());
+    }
+
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns("rewardId", "name", "price");
+
+        grid.asSingleSelect().addValueChangeListener(e -> editReward(e.getValue()));
+    }
+
+    private void editReward(Reward value) {
+        if (value == null) {
+            closeEditor();
+        } else {
+            form.setReward(value);
+            form.setVisible(true);
+        }
     }
 
     private void filterById(int rewardId) {
-            grid.setItems(rewardService.getRewardsById(rewardId));
+        grid.setItems(rewardService.getRewardsById(rewardId));
     }
 }
