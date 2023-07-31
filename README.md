@@ -24,6 +24,13 @@ The backend repository can be accessed at the following link:
 https://github.com/michal2220/michal2220_Kaizen
 
 
+Port for using this app is: 8090 on localhost, for example url:
+Note, that for this app to run correctly, first Kaizen backend must be running too.
+
+   ```
+   http://localhost:8090/users
+   ```
+
 Example snapshots:
 
 User view:
