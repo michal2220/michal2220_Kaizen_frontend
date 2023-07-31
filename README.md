@@ -1,7 +1,4 @@
-# michal2220_Kaizen_frontend
-
-
-Kaizen Management System - Frontend
+# Kaizen Management System - Frontend
 
 
 The Kaizen Management System Frontend is a web-based user interface developed using the Vaadin framework. It provides an intuitive and user-friendly platform for managing kaizens, rewards, and user data within an organization. The frontend seamlessly interacts with the backend, which is built using Java and the Spring Boot framework, facilitating efficient data exchange and real-time updates.
