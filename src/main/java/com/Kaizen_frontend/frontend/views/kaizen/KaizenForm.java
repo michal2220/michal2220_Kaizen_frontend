@@ -69,10 +69,10 @@ public class KaizenForm extends FormLayout {
     }
 
     private Component createButtonLayout() {
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_SUCCESS);
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        save.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        translate.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        translate.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
 
 
         save.addClickListener(event -> validateAndSave());

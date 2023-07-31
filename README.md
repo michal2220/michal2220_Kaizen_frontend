@@ -22,3 +22,15 @@ The frontend is integrated with the backend, which is hosted in a separate repos
 
 The backend repository can be accessed at the following link:
 https://github.com/michal2220/michal2220_Kaizen
+
+
+Example snapshots:
+
+User view:
+
+![img.png](img.png)
+
+
+Kaizen view:
+
+![img_1.png](img_1.png)
