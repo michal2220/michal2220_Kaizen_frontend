@@ -24,7 +24,7 @@ public class KaizenService {
                 .bodyToMono(Kaizen[].class).block();
     }
 
-    public Kaizen[] findKaizenById(int kaizenId) {
+    public Kaizen[] findKaizenById(int kaizenId)  {
 
         return webClient.get()
                 .uri("/kaizens/kaizenId/{kaizenId}", kaizenId)

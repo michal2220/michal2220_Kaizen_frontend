@@ -32,6 +32,7 @@ public class UserService {
 
         if (users == null) {
             throw new UserNotFoundException("Users with lastname " + lastname + " were not found.");
+
         }
 
         return users;

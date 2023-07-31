@@ -92,7 +92,7 @@ public class KaizenList extends VerticalLayout {
     }
 
     private Component getToolbar() {
-        filteringByUserId();
+        filteringByKaizenId();
         filterOlderThan();
         filterCreatedBy();
 
@@ -128,17 +128,21 @@ public class KaizenList extends VerticalLayout {
         }
     }
 
-    private void findByUserId(int kaizenId) {
-        grid.setItems(service.findKaizenById(kaizenId));
+    private void findByKaizenId(int kaizenId) {
+        try {
+            grid.setItems(service.findKaizenById(kaizenId));
+        } catch (Exception e) {
+            updateList();
+        }
     }
 
-    private void filteringByUserId() throws NullPointerException {
+    private void filteringByKaizenId() throws NullPointerException {
         idField.setPlaceholder("Find by kaizenId...");
         idField.setClearButtonVisible(true);
         idField.setValueChangeMode(ValueChangeMode.LAZY);
         idField.addValueChangeListener(e -> {
             try {
-                findByUserId(idField.getValue());
+                findByKaizenId(idField.getValue());
 
             } catch (NullPointerException ex) {
                 updateList();
