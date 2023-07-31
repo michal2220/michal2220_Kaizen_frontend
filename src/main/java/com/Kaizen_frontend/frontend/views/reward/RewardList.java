@@ -117,6 +117,10 @@ public class RewardList extends VerticalLayout {
     }
 
     private void filterById(int rewardId) {
-        grid.setItems(rewardService.getRewardsById(rewardId));
+        try {
+            grid.setItems(rewardService.getRewardsById(rewardId));
+        } catch (Exception e) {
+            updateList();
+        }
     }
 }
